@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laxvion Solutions | Engineering Digital Souls</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Laxvion Solutions | Genesis Workflow</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
-
-        /* Base & Theme Setup */
+        
         :root {
             --bg-dark: #0a0a0a;
             --bg-glass: rgba(26, 26, 26, 0.5);
@@ -22,58 +17,17 @@
             --text-primary: #e5e7eb;
             --text-secondary: #9ca3af;
         }
-        html { scroll-behavior: smooth; }
+        
         body {
-            background-color: var(--bg-dark);
+            background: radial-gradient(ellipse at center, #1a0a2a 0%, #0a0a0a 70%);
             color: var(--text-primary);
             font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
-            background: radial-gradient(ellipse at center, #1a0a2a 0%, #0a0a0a 70%);
         }
-
-        /* Full-Page Slide Scroll */
-        .slide-container {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-        }
-        .section {
-            height: 100vh;
-            width: 100vw;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 4rem 2rem;
-            position: relative;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .section.visible {
-            opacity: 1;
-        }
-
-        /* Animated Content on Visible */
-        .animated-item {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1);
-        }
-        .visible .animated-item {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Staggered Animations */
-        .visible .animated-item:nth-child(1) { transition-delay: 0.2s; }
-        .visible .animated-item:nth-child(2) { transition-delay: 0.3s; }
-        .visible .animated-item:nth-child(3) { transition-delay: 0.4s; }
-        .visible .animated-item:nth-child(4) { transition-delay: 0.5s; }
-        .visible .grid .animated-item { transition-delay: unset; } /* Reset for grid items */
-
-        /* Components & Styling */
+        
         h1, h2, h3 { font-family: 'IBM Plex Mono', monospace; }
-        .text-accent { color: var(--accent-violet); }
-        .bg-accent { background-color: var(--accent-violet); }
+        
         .glass-card {
             background: linear-gradient(145deg, rgba(26, 26, 26, 0.6), rgba(15, 15, 15, 0.3));
             backdrop-filter: blur(16px);
@@ -84,836 +38,344 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.4s ease;
         }
+        
         .glass-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(192, 38, 211, 0.2);
         }
-        #background-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+        
+        .text-accent { color: var(--accent-violet); }
+        
+        .workflow-step {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
         }
         
-        /* Header & Nav */
-        .header {
-            background-color: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-        .nav-link {
-            position: relative;
-            padding: 0.5rem 0;
-            transition: color 0.3s;
-        }
-        .nav-link:hover { color: var(--accent-violet); }
-        .nav-link::after {
+        .workflow-step:before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-violet);
-            transition: width 0.4s ease-out;
-        }
-        .nav-link.active::after { width: 100%; }
-        
-        /* Genesis Workflow Diagram */
-        .workflow-step {
-            transition: all 0.4s;
-            opacity: 0.4;
-            position: relative;
-            z-index: 1;
-        }
-        .workflow-step.active {
-            opacity: 1;
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(192, 38, 211, 0.3);
-            z-index: 2;
-        }
-        .workflow-line {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, var(--border-color), var(--accent-violet));
-            transform-origin: left;
-        }
-        
-        /* Tech Stats */
-        .tech-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 3rem;
-            font-weight: 700;
-            font-family: 'IBM Plex Mono', monospace;
-            color: var(--accent-violet);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 15px rgba(192, 38, 211, 0.6);
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        
-        /* Particle Effect */
-        .particles-container {
-            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            height: 4px;
+            background: linear-gradient(90deg, #c026d3, #7e22ce);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
         }
         
-        /* Team Cards */
+        .workflow-step:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .workflow-step.active {
+            background: rgba(192, 38, 211, 0.1);
+            box-shadow: 0 0 30px rgba(192, 38, 211, 0.2);
+        }
+        
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(192, 38, 211, 0.1);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--accent-violet);
+        }
+        
         .team-card {
             transition: all 0.3s ease;
         }
+        
         .team-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 40px rgba(192, 38, 211, 0.3);
         }
         
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .section {
-                padding: 2rem 1rem;
-                height: auto;
-                min-height: 100vh;
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .workflow-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 1024px) {
+            .workflow-container {
+                grid-template-columns: 1fr 1fr;
             }
-            h1 {
-                font-size: 2.5rem;
-            }
-            h2 {
-                font-size: 2rem;
-            }
+        }
+        
+        .highlight-box {
+            border-left: 4px solid var(--accent-violet);
+            padding-left: 1.5rem;
         }
     </style>
 </head>
-<body>
-
-    <canvas id="background-canvas"></canvas>
-    <div class="particles-container" id="particles"></div>
-
-    <header class="header fixed top-0 z-50 w-full border-b border-gray-800">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Laxvion<span class="text-accent">.</span></h1>
-            <div id="main-nav" class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                <a href="#hero" class="nav-link">Home</a>
-                <a href="#problem" class="nav-link">The Gap</a>
-                <a href="#solution" class="nav-link">Our Solution</a>
-                <a href="#workflow" class="nav-link">Genesis Workflow</a>
-                <a href="#market" class="nav-link">Market</a>
-                <a href="#team" class="nav-link">Team</a>
-                <a href="#contact" class="nav-link">Contact</a>
+<body class="text-gray-100">
+    <header class="py-6 px-4 lg:px-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                <span class="text-accent">Laxvion</span> Solutions
             </div>
-            <div class="md:hidden text-xl">
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#" class="hover:text-accent transition-colors">Home</a>
+                <a href="#" class="hover:text-accent transition-colors">Technology</a>
+                <a href="#" class="text-accent font-bold">Workflow</a>
+                <a href="#" class="hover:text-accent transition-colors">Team</a>
+                <a href="#" class="hover:text-accent transition-colors">Contact</a>
+            </nav>
+            <button class="md:hidden text-xl">
                 <i class="fas fa-bars"></i>
-            </div>
-        </nav>
+            </button>
+        </div>
     </header>
 
-    <main class="slide-container">
-        <section id="hero" class="section text-center">
-            <div class="max-w-4xl mx-auto relative z-10">
-                <div class="animated-item">
-                    <div class="inline-block bg-gradient-to-r from-purple-900 to-fuchsia-900 px-4 py-1 rounded-full mb-4 text-sm">
-                        <i class="fas fa-bolt mr-2"></i>Generating the Future of Influence
+    <main class="container mx-auto px-4 py-12 max-w-6xl">
+        <section class="mb-16 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                The <span class="text-accent">Genesis</span> Workflow
+            </h1>
+            <p class="text-lg text-text-secondary max-w-3xl mx-auto">
+                Our proprietary workflow extends beyond ComfyUI with 18 custom nodes and pipelines that enable deterministic output control at scale.
+            </p>
+        </section>
+
+        <div class="workflow-container">
+            <div class="space-y-8">
+                <!-- Workflow Steps -->
+                <div class="glass-card workflow-step active">
+                    <div class="flex items-start gap-6">
+                        <div class="text-3xl font-bold text-accent">1</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Blueprint</h3>
+                            <p class="text-text-secondary">ControlNet (Pose, Depth) + Core Prompting</p>
+                        </div>
                     </div>
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold animated-item">Beyond Prompts. Beyond Pixels.<span class="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-500 mt-4">We Engineer Digital Souls.</span></h1>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-text-secondary animated-item">Laxvion has developed the world's most advanced generative workflow. We don't just create AI influencers; we build consistently life-like, autonomous digital beings with unique personalities and persistent identities.</p>
-                <div class="mt-8 animated-item">
-                    <a href="#workflow" class="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-all transform hover:scale-105 duration-300 inline-flex items-center">
-                        Discover The Genesis Workflow <i class="fas fa-arrow-down ml-3"></i>
-                    </a>
                 </div>
                 
-                <div class="grid grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto">
-                    <div class="tech-stat animated-item">
-                        <div class="stat-value">99.7%</div>
-                        <div class="stat-label">Identity Consistency</div>
+                <div class="glass-card workflow-step">
+                    <div class="flex items-start gap-6">
+                        <div class="text-3xl font-bold text-accent">2</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Identity</h3>
+                            <p class="text-text-secondary">IP-Adapter + Custom Identity LoRA</p>
+                        </div>
                     </div>
-                    <div class="tech-stat animated-item" style="transition-delay: 0.1s">
-                        <div class="stat-value">12x</div>
-                        <div class="stat-label">Faster Production</div>
+                </div>
+                
+                <div class="glass-card workflow-step">
+                    <div class="flex items-start gap-6">
+                        <div class="text-3xl font-bold text-accent">3</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Generation</h3>
+                            <p class="text-text-secondary">Custom Checkpoint Mix + Latent Refinement</p>
+                        </div>
                     </div>
-                    <div class="tech-stat animated-item" style="transition-delay: 0.2s">
-                        <div class="stat-value">∞</div>
-                        <div class="stat-label">Creative Possibilities</div>
+                </div>
+                
+                <div class="glass-card workflow-step">
+                    <div class="flex items-start gap-6">
+                        <div class="text-3xl font-bold text-accent">4</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Detailing</h3>
+                            <p class="text-text-secondary">Multi-Pass Detailer Nodes (Face, Hands, Fabric)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card workflow-step">
+                    <div class="flex items-start gap-6">
+                        <div class="text-3xl font-bold text-accent">5</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Soul</h3>
+                            <p class="text-text-secondary">Personality Matrix (LLM-driven Content)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Highlight Box -->
+                <div class="glass-card mt-8">
+                    <div class="highlight-box">
+                        <p class="text-lg text-purple-300">
+                            <i class="fas fa-quote-left text-accent mr-2"></i>
+                            Breathe life into pixels. A proprietary mix of fine-tuned checkpoints and a multi-stage denoising process generates the core image with a focus on photorealistic lighting and anatomy.
+                        </p>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section id="problem" class="section">
-            <div class="container mx-auto max-w-6xl text-center">
-                <h2 class="text-4xl md:text-5xl font-bold animated-item">The Digital Influence Crisis</h2>
-                <p class="text-lg text-text-secondary mt-4 mb-12 max-w-3xl mx-auto animated-item">Today's $200B influencer market faces unprecedented challenges that limit brand potential and ROI.</p>
-                <div class="grid md:grid-cols-3 gap-8 text-left">
-                    <div class="glass-card animated-item">
-                        <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 mb-4">
-                            <i class="fas fa-user-slash text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">Human Limitations</h3>
-                        <p class="text-text-secondary">Scandals, creative burnout, and off-brand messaging create constant risk and dilute marketing impact. 74% of brands report influencer-related PR crises annually.</p>
-                    </div>
-                    <div class="glass-card animated-item" style="transition-delay: 0.3s;">
-                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 mb-4">
-                            <i class="fas fa-robot text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">AI Inconsistency</h3>
-                        <p class="text-text-secondary">Standard tools produce chaotic results. Different faces, broken hands, and the "dead eye" effect shatter the illusion of reality. 92% of users can detect AI-generated content.</p>
-                    </div>
-                    <div class="glass-card animated-item" style="transition-delay: 0.4s;">
-                        <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
-                            <i class="fas fa-lock text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">Creative Constraints</h3>
-                        <p class="text-text-secondary">True creative freedom is impossible. You're limited by logistics, locations, and the static nature of existing talent. Campaigns take 3-4 weeks on average to launch.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="solution" class="section">
-            <div class="container mx-auto max-w-6xl">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div class="text-center lg:text-left">
-                        <div class="animated-item">
-                            <div class="inline-block bg-gradient-to-r from-purple-900 to-fuchsia-900 px-4 py-1 rounded-full mb-4 text-sm">
-                                <i class="fas fa-star mr-2"></i>Introducing Our Flagship Creation
-                            </div>
-                        </div>
-                        <h2 class="text-4xl md:text-5xl font-bold animated-item">Lyra: The World's First Autonomous Digital Being</h2>
-                        <p class="text-lg text-text-secondary mt-4 mb-6 max-w-xl mx-auto lg:mx-0 animated-item">Lyra represents a quantum leap in digital influence technology. Not an image, but a persistent digital entity with a consistent identity across all media.</p>
-                        <div class="glass-card animated-item">
-                            <ul class="space-y-3 text-text-primary">
-                                <li class="flex items-start">
-                                    <i class="fas fa-fingerprint text-accent text-xl mr-3 mt-1"></i>
-                                    <div>
-                                        <strong class="font-mono">Persistent Identity:</strong> 
-                                        <span class="text-text-secondary">Same face, physique, and features across 10,000+ generations</span>
-                                    </div>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-brain text-accent text-xl mr-3 mt-1"></i>
-                                    <div>
-                                        <strong class="font-mono">Personality Matrix:</strong> 
-                                        <span class="text-text-secondary">Custom LLM framework creates authentic, brand-aligned content</span>
-                                    </div>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-infinity text-accent text-xl mr-3 mt-1"></i>
-                                    <div>
-                                        <strong class="font-mono">Unlimited Creativity:</strong> 
-                                        <span class="text-text-secondary">Place her in any scene, style, or narrative instantly</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="animated-item">
+            
+            <div>
+                <!-- Workflow Diagram -->
+                <div class="glass-card h-full">
+                    <div class="flex justify-center mb-6">
                         <div class="relative">
-                            <div class="glass-card p-2 rounded-xl overflow-hidden">
-                                <div class="bg-gradient-to-br from-purple-900 to-fuchsia-900 p-1 rounded-lg">
-                                    <img src="https://storage.googleapis.com/gemini-prod-us-west1-423908/uploaded/Screenshot%202025-07-09%20at%202.07.47%E2%80%AFAM.jpg" 
-                                         onerror="this.onerror=null; this.src='https://placehold.co/800x800/111111/c026d3?text=Lyra%3A+Genesis+Model'; this.alt='Image of Lyra failed to load.'"
-                                         alt="AI Influencer Lyra, a hyper-realistic digital woman created by Laxvion" 
-                                         class="rounded-lg w-full h-auto object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-900 to-fuchsia-900 rounded-xl blur-xl opacity-50"></div>
+                            <div class="relative bg-gradient-to-br from-purple-900 to-fuchsia-900 rounded-xl p-1">
+                                <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="inline-block bg-gray-800 rounded-full p-6 mb-6">
+                                            <i class="fas fa-project-diagram text-5xl text-accent"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold mb-2">Genesis Workflow Diagram</h3>
+                                        <p class="text-text-secondary">Visual representation of our proprietary pipeline</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="absolute -top-4 -right-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white py-2 px-4 rounded-lg font-bold">
-                                Lyra AI
-                            </div>
                         </div>
-                        <div class="mt-4 glass-card text-center">
-                            <p class="text-sm"><span class="font-bold text-accent">Technical Specs:</span> 12M parameter Identity Model · 7B parameter Personality Matrix · Multi-modal Content Engine</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mt-8">
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-accent text-xl mb-2">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h4 class="font-bold">18 Custom Nodes</h4>
+                            <p class="text-sm text-text-secondary">Proprietary workflow components</p>
+                        </div>
+                        
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-accent text-xl mb-2">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h4 class="font-bold">Temporal Consistency</h4>
+                            <p class="text-sm text-text-secondary">Frame-to-frame stability for video</p>
+                        </div>
+                        
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-accent text-xl mb-2">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h4 class="font-bold">Parallel Processing</h4>
+                            <p class="text-sm text-text-secondary">10x faster than standard pipelines</p>
+                        </div>
+                        
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-accent text-xl mb-2">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h4 class="font-bold">Multi-Modal Output</h4>
+                            <p class="text-sm text-text-secondary">Images, video, text, and audio</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section id="workflow" class="section">
-            <div class="container mx-auto max-w-6xl text-center">
-                 <h2 class="text-4xl md:text-5xl font-bold animated-item">The Genesis Workflow</h2>
-                <p class="text-lg text-text-secondary mt-4 mb-12 max-w-3xl mx-auto animated-item">Our proprietary workflow extends beyond ComfyUI with 18 custom nodes and pipelines that enable deterministic output control at scale.</p>
-                
-                <div id="workflow-diagram" class="grid md:grid-cols-5 gap-4 items-center text-center font-mono text-sm max-w-5xl mx-auto">
-                    <div id="step-1" class="workflow-step glass-card p-4 animated-item">
-                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-accent mx-auto mb-2">
-                            <i class="fas fa-drafting-compass"></i>
-                        </div>
-                        <h4 class="font-bold text-accent">1. Blueprint</h4>
-                        <p class="text-xs text-text-secondary mt-1">ControlNet (Pose, Depth) + Core Prompting</p>
-                    </div>
-                    <div id="step-2" class="workflow-step glass-card p-4 animated-item" style="transition-delay: 0.3s">
-                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-accent mx-auto mb-2">
-                            <i class="fas fa-id-card"></i>
-                        </div>
-                        <h4 class="font-bold text-accent">2. Identity</h4>
-                        <p class="text-xs text-text-secondary mt-1">IP-Adapter + Custom Identity LoRA</p>
-                    </div>
-                    <div id="step-3" class="workflow-step glass-card p-4 animated-item" style="transition-delay: 0.4s">
-                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-accent mx-auto mb-2">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h4 class="font-bold text-accent">3. Generation</h4>
-                        <p class="text-xs text-text-secondary mt-1">Custom Checkpoint Mix + Latent Refinement</p>
-                    </div>
-                     <div id="step-4" class="workflow-step glass-card p-4 animated-item" style="transition-delay: 0.5s">
-                         <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-accent mx-auto mb-2">
-                            <i class="fas fa-search-plus"></i>
-                        </div>
-                        <h4 class="font-bold text-accent">4. Detailing</h4>
-                        <p class="text-xs text-text-secondary mt-1">Multi-Pass Detailer Nodes (Face, Hands, Fabric)</p>
-                    </div>
-                     <div id="step-5" class="workflow-step glass-card p-4 animated-item" style="transition-delay: 0.6s">
-                         <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-accent mx-auto mb-2">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h4 class="font-bold text-accent">5. Soul</h4>
-                        <p class="text-xs text-text-secondary mt-1">Personality Matrix (LLM-driven Content)</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 glass-card max-w-2xl mx-auto p-6 animated-item" style="transition-delay: 0.7s">
-                    <p id="workflow-description" class="text-lg text-purple-300 min-h-[60px]">Hover over each step to learn about our proprietary technology</p>
-                </div>
-                
-                <div class="mt-12 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div class="glass-card p-4 text-center">
-                        <div class="text-accent text-2xl mb-2">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <h4 class="font-bold">18 Custom Nodes</h4>
-                        <p class="text-sm text-text-secondary">Proprietary workflow components</p>
-                    </div>
-                    <div class="glass-card p-4 text-center">
-                        <div class="text-accent text-2xl mb-2">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <h4 class="font-bold">Temporal Consistency</h4>
-                        <p class="text-sm text-text-secondary">Frame-to-frame stability for video</p>
-                    </div>
-                    <div class="glass-card p-4 text-center">
-                        <div class="text-accent text-2xl mb-2">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h4 class="font-bold">Parallel Processing</h4>
-                        <p class="text-sm text-text-secondary">10x faster than standard pipelines</p>
-                    </div>
-                    <div class="glass-card p-4 text-center">
-                        <div class="text-accent text-2xl mb-2">
-                            <i class="fas fa-project-diagram"></i>
-                        </div>
-                        <h4 class="font-bold">Multi-Modal Output</h4>
-                        <p class="text-sm text-text-secondary">Images, video, text, and audio</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="market" class="section">
-             <div class="container mx-auto w-full max-w-6xl">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl md:text-5xl font-bold animated-item">A New $15B Market Category</h2>
-                    <p class="mt-4 text-lg text-text-secondary max-w-4xl mx-auto animated-item">We are pioneering the "Digital Human as a Service" (DHaaS) category, positioned to capture 20% of the creator economy by 2028.</p>
-                </div>
-                <div class="grid lg:grid-cols-5 gap-8 items-center">
-                    <div class="lg:col-span-3 glass-card p-6 animated-item">
-                        <div class="h-96">
-                            <canvas id="marketChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-2 space-y-6 animated-item" style="transition-delay: 0.3s;">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-accent flex-shrink-0 font-mono">1</div>
-                            <div>
-                                <h4 class="font-bold">Phase 1: Vanguard Partners</h4>
-                                <p class="text-sm text-text-secondary">Forge alliances with 5-10 visionary brands to create undeniable proof points and dominate the narrative.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-accent flex-shrink-0 font-mono">2</div>
-                            <div>
-                                <h4 class="font-bold">Phase 2: Platformization</h4>
-                                <p class="text-sm text-text-secondary">Launch a subscription-based platform for agencies to leverage our Genesis Workflow for their own clients.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-accent flex-shrink-0 font-mono">3</div>
-                            <div>
-                                <h4 class="font-bold">Phase 3: The API Economy</h4>
-                                <p class="text-sm text-text-secondary">Open the Genesis Engine API, becoming the foundational layer for all digital human creation across industries.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-card p-6">
-                        <h3 class="text-xl font-bold mb-4 text-accent">Competitive Advantage</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
-                                <span>Only platform with persistent identity technology</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
-                                <span>Patented multi-pass detailing process</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
-                                <span>3x faster content production than competitors</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="glass-card p-6">
-                        <h3 class="text-xl font-bold mb-4 text-accent">Market Validation</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fas fa-chart-line text-blue-400 mr-2 mt-1"></i>
-                                <span>92% of brands express interest in AI influencers</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-dollar-sign text-yellow-400 mr-2 mt-1"></i>
-                                <span>Projected $15B DHaaS market by 2028</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-users text-purple-400 mr-2 mt-1"></i>
-                                <span>300% YoY growth in virtual influencer engagement</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="glass-card p-6">
-                        <h3 class="text-xl font-bold mb-4 text-accent">Financial Projections</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <i class="fas fa-rocket text-pink-400 mr-2 mt-1"></i>
-                                <span>Year 1: $2.5M revenue</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-chart-pie text-green-400 mr-2 mt-1"></i>
-                                <span>Year 2: $12M revenue</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-flag text-orange-400 mr-2 mt-1"></i>
-                                <span>Year 3: $45M revenue</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="team" class="section">
-            <div class="container mx-auto text-center max-w-4xl">
-                <h2 class="text-4xl md:text-5xl font-bold animated-item">The Architects of Genesis</h2>
-                <p class="mt-4 text-lg text-text-secondary mx-auto animated-item">Our team combines world-class expertise in generative AI, computational mathematics, and digital artistry.</p>
-                <div class="grid md:grid-cols-2 gap-8 mt-12">
-                    <div class="glass-card text-center team-card animated-item">
-                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-accent mb-4">
+        </div>
+        
+        <!-- Team Section -->
+        <section class="mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
+                The <span class="text-accent">Genesis</span> Team
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card team-card">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
                             <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
                                 <i class="fas fa-user text-5xl text-white"></i>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold">Rajat Khandelwal</h3>
+                        <h3 class="text-xl font-bold">Rajat Khandelwal</h3>
                         <p class="text-accent font-medium mt-1 font-mono">CEO & Visionary Architect</p>
-                        <p class="text-text-secondary mt-4">An <strong class="text-white">IIT Guwahati (CS)</strong> alumnus with 8 years in generative AI. Formerly led AI initiatives at Google Research, architecting scalable systems that translate raw AI power into viable, market-disrupting products.</p>
-                        <div class="mt-4 flex justify-center gap-3">
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
+                        <p class="text-text-secondary mt-4">An IIT Guwahati (CS) alumnus with 8 years in generative AI. Formerly led AI initiatives at Google Research.</p>
                     </div>
-                    <div class="glass-card text-center team-card animated-item" style="transition-delay: 0.3s;">
-                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-accent mb-4">
+                </div>
+                
+                <div class="glass-card team-card">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
                             <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
                                 <i class="fas fa-user text-5xl text-white"></i>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-bold">Lokendra Singh</h3>
-                        <p class="text-accent font-medium mt-1 font-mono">CTO & Genesis Workflow Pioneer</p>
-                        <p class="text-text-secondary mt-4">A graduate of <strong class="text-white">IIT Kanpur (Math & Computing)</strong> with a PhD in Computational Mathematics. Authored 12 papers on neural rendering and GAN architectures. The mastermind behind our proprietary node-based workflow.</p>
-                        <div class="mt-4 flex justify-center gap-3">
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-google-scholar"></i>
-                            </a>
-                            <a href="#" class="text-accent hover:text-white transition-colors">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
+                        <h3 class="text-xl font-bold">Lokendra Singh</h3>
+                        <p class="text-accent font-medium mt-1 font-mono">Research Lead</p>
+                        <p class="text-text-secondary mt-4">A graduate of IIT Kanpur (Math & Computing) with a PhD in Computational Mathematics.</p>
                     </div>
                 </div>
                 
-                <div class="mt-12 glass-card p-6 max-w-2xl mx-auto">
-                    <h3 class="text-xl font-bold mb-4 text-accent">Research & Development</h3>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="text-center">
-                            <div class="text-3xl text-accent font-bold">18</div>
-                            <div class="text-sm text-text-secondary">Patents Filed</div>
+                <div class="glass-card team-card">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
+                            <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
+                                <i class="fas fa-user text-5xl text-white"></i>
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-3xl text-accent font-bold">42</div>
-                            <div class="text-sm text-text-secondary">Research Papers</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl text-accent font-bold">7</div>
-                            <div class="text-sm text-text-secondary">Open Source Projects</div>
-                        </div>
+                        <h3 class="text-xl font-bold">Dinesh Jakhar</h3>
+                        <p class="text-accent font-medium mt-1 font-mono">CTO & Workflow Engineer</p>
+                        <p class="text-text-secondary mt-4">Full stack developer and workflow engineer. Architect of the Genesis pipeline and integration systems.</p>
                     </div>
                 </div>
             </div>
         </section>
         
-        <section id="contact" class="section">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl md:text-5xl font-bold animated-item">Become a Vanguard Partner</h2>
-                <p class="mt-4 text-lg text-text-secondary max-w-3xl mx-auto animated-item">Our technology requires immense computational power. A partnership with NVIDIA will accelerate our roadmap and establish an unassailable market lead.</p>
-                <div class="mt-12 animated-item">
-                    <a href="mailto:partners@laxvionsolutions.com" class="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-4 px-10 rounded-lg hover:opacity-90 transition-all transform hover:scale-105 duration-300 text-lg inline-flex items-center">
-                        Initiate Partnership <i class="fas fa-arrow-right ml-3"></i>
-                    </a>
-                </div>
-                <div class="mt-12 glass-card max-w-2xl mx-auto animated-item" style="transition-delay: 0.3s;">
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-text-primary">
-                        <div>
-                            <div class="w-16 h-16 mx-auto rounded-full bg-purple-500/20 flex items-center justify-center text-accent mb-3">
-                                <i class="fas fa-user text-2xl"></i>
-                            </div>
-                            <p class="font-semibold text-white">Rajat Khandelwal</p>
-                            <a href="mailto:rajat.ceo@laxvionsolutions.com" class="hover:text-accent transition-colors text-sm">rajat.ceo@laxvionsolutions.com</a>
-                        </div>
-                        <div>
-                            <div class="w-16 h-16 mx-auto rounded-full bg-purple-500/20 flex items-center justify-center text-accent mb-3">
-                                <i class="fas fa-user text-2xl"></i>
-                            </div>
-                            <p class="font-semibold text-white">Lokendra Singh</p>
-                            <a href="mailto:lokendra.ceo@laxvionsolutions.com" class="hover:text-accent transition-colors text-sm">lokendra.ceo@laxvionsolutions.com</a>
-                        </div>
-                     </div>
-                     <div class="mt-6 border-t border-gray-700 pt-4">
-                         <div class="w-16 h-16 mx-auto rounded-full bg-purple-500/20 flex items-center justify-center text-accent mb-3">
-                                <i class="fas fa-phone text-2xl"></i>
-                            </div>
-                         <p class="font-semibold text-white">Phone</p>
-                         <p class="text-sm">+91 63504 90331</p>
-                     </div>
+        <!-- Call to Action -->
+        <section class="mt-20 text-center">
+            <div class="glass-card py-12 px-6 max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    Ready to Harness the Power of <span class="text-accent">Genesis</span>?
+                </h2>
+                <p class="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+                    Our workflow delivers unprecedented consistency and creativity for AI-generated content. See it in action.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity">
+                        Request Demo
+                    </button>
+                    <button class="bg-transparent border-2 border-accent text-accent font-bold py-3 px-8 rounded-lg hover:bg-accent hover:text-white transition-colors">
+                        Contact Our Team
+                    </button>
                 </div>
             </div>
         </section>
     </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Global Variables ---
-    const sections = document.querySelectorAll('.section');
-    const navLinks = document.querySelectorAll('#main-nav a');
-    const slideContainer = document.querySelector('.slide-container');
+    <footer class="mt-20 py-10 border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-2xl font-bold mb-4">
+                <span class="text-accent">Laxvion</span> Solutions
+            </div>
+            <p class="text-text-secondary max-w-2xl mx-auto">
+                Engineering the future of digital influence with proprietary AI workflows and persistent digital identities.
+            </p>
+            <div class="mt-6 flex justify-center space-x-6">
+                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+            <div class="mt-8 text-sm text-text-secondary">
+                © 2023 Laxvion Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
-    // --- Section Intersection Observer for Animations & Nav Highlighting ---
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                const id = entry.target.getAttribute('id');
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+    <script>
+        // Workflow step interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            const steps = document.querySelectorAll('.workflow-step');
+            
+            steps.forEach(step => {
+                step.addEventListener('click', () => {
+                    steps.forEach(s => s.classList.remove('active'));
+                    step.classList.add('active');
                 });
-            }
-        });
-    }, { threshold: 0.5 }); // Trigger when 50% of the section is visible
-
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-
-    // --- Dynamic Background Canvas Animation (Neural Plexus) ---
-    const bgCanvas = document.getElementById('background-canvas');
-    if (bgCanvas) {
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: bgCanvas, 
-            antialias: true,
-            alpha: true
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.position.z = 50;
-
-        // Create particles with a purple theme
-        const particleCount = 300;
-        const particles = new THREE.BufferGeometry();
-        const posArray = new Float32Array(particleCount * 3);
-        const colorArray = new Float32Array(particleCount * 3);
-        
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            // Position
-            posArray[i] = (Math.random() - 0.5) * 200;
-            posArray[i+1] = (Math.random() - 0.5) * 200;
-            posArray[i+2] = (Math.random() - 0.5) * 200;
-            
-            // Color (purple theme)
-            colorArray[i] = 0.75 + Math.random() * 0.25; // R
-            colorArray[i+1] = 0.3 + Math.random() * 0.3; // G
-            colorArray[i+2] = 0.8 + Math.random() * 0.2; // B
-        }
-        
-        particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        particles.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
-
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.25,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.7,
-            blending: THREE.AdditiveBlending
-        });
-        
-        const particleMesh = new THREE.Points(particles, particleMaterial);
-        scene.add(particleMesh);
-        
-        // Create connecting lines
-        const lineGeometry = new THREE.BufferGeometry();
-        const lineMaterial = new THREE.LineBasicMaterial({
-            color: 0x9933ff,
-            transparent: true,
-            opacity: 0.1
-        });
-        
-        const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-        scene.add(lines);
-        
-        let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) / 100;
-            mouseY = (e.clientY - window.innerHeight / 2) / 100;
-        });
-
-        const animate = () => {
-            requestAnimationFrame(animate);
-            
-            // Update camera position based on mouse
-            camera.position.x += (mouseX - camera.position.x) * 0.01;
-            camera.position.y += (-mouseY - camera.position.y) * 0.01;
-            camera.lookAt(scene.position);
-            
-            // Update particle positions for subtle movement
-            const positions = particles.attributes.position.array;
-            for (let i = 0; i < positions.length; i += 3) {
-                positions[i] += (Math.random() - 0.5) * 0.1;
-                positions[i+1] += (Math.random() - 0.5) * 0.1;
-                positions[i+2] += (Math.random() - 0.5) * 0.1;
-            }
-            particles.attributes.position.needsUpdate = true;
-            
-            // Update connecting lines
-            const linePositions = [];
-            for (let i = 0; i < particleCount; i++) {
-                for (let j = i + 1; j < particleCount; j++) {
-                    const i3 = i * 3;
-                    const j3 = j * 3;
-                    const dx = positions[i3] - positions[j3];
-                    const dy = positions[i3+1] - positions[j3+1];
-                    const dz = positions[i3+2] - positions[j3+2];
-                    const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                    
-                    if (dist < 30) {
-                        linePositions.push(positions[i3], positions[i3+1], positions[i3+2]);
-                        linePositions.push(positions[j3], positions[j3+1], positions[j3+2]);
-                    }
-                }
-            }
-            
-            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-            
-            renderer.render(scene, camera);
-        };
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    }
-    
-    // --- Interactive Genesis Workflow Diagram ---
-    const workflowSection = document.getElementById('workflow');
-    if (workflowSection) {
-        const steps = [
-            { id: 'step-1', el: document.getElementById('step-1'), text: 'Define the foundational structure. We use ControlNet to lock in the exact pose, composition, and depth of the scene for unparalleled directorial control.' },
-            { id: 'step-2', el: document.getElementById('step-2'), text: 'Inject the unique soul. Our custom-trained LoRA models and IP-Adapters ensure the digital human\'s facial identity is perfectly consistent across every single generation.' },
-            { id: 'step-3', el: document.getElementById('step-3'), text: 'Breathe life into pixels. A proprietary mix of fine-tuned checkpoints and a multi-stage denoising process generates the core image with a focus on photorealistic lighting and anatomy.' },
-            { id: 'step-4', el: document.getElementById('step-4'), text: 'Achieve hyperrealism. Automated, multi-pass detailer nodes target and enhance specific features—skin texture, eye reflections, fabric weaves—eliminating any trace of the uncanny valley.' },
-            { id: 'step-5', el: document.getElementById('step-5'), text: 'Grant a voice. A federated LLM framework, our Personality Matrix, analyzes the image and generates context-aware, on-brand captions and social media narratives autonomously.' }
-        ];
-        const descriptionEl = document.getElementById('workflow-description');
-        
-        // Hover functionality
-        steps.forEach(step => {
-            step.el.addEventListener('mouseenter', () => {
-                steps.forEach(s => s.el.classList.remove('active'));
-                step.el.classList.add('active');
-                descriptionEl.style.opacity = 0;
-                setTimeout(() => {
-                   descriptionEl.textContent = step.text;
-                   descriptionEl.style.opacity = 1;
-                }, 200);
             });
         });
-        
-        // Set first step as active when section becomes visible
-        const workflowObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    steps.forEach(s => s.el.classList.remove('active'));
-                    steps[0].el.classList.add('active');
-                    descriptionEl.textContent = steps[0].text;
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        workflowObserver.observe(workflowSection);
-    }
-
-
-    // --- Market Chart ---
-    const ctx = document.getElementById('marketChart')?.getContext('2d');
-    if (ctx) {
-        Chart.defaults.color = '#e2e7eb';
-        Chart.defaults.borderColor = 'rgba(55, 65, 81, 1)';
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Influencer Marketing', 'Digital Advertising', 'Creator Economy', 'Virtual Influencers'],
-                datasets: [{
-                    label: 'Projected Market Size by 2028 (in Billions USD)',
-                    data: [102.4, 910.4, 480, 15.2],
-                    backgroundColor: [
-                        'rgba(192, 38, 211, 0.4)',
-                        'rgba(192, 38, 211, 0.6)',
-                        'rgba(192, 38, 211, 0.8)',
-                        'rgba(102, 16, 242, 0.9)'
-                    ],
-                    borderColor: [
-                        'rgba(192, 38, 211, 1)',
-                        'rgba(192, 38, 211, 1)',
-                        'rgba(192, 38, 211, 1)',
-                        'rgba(102, 16, 242, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y', // Horizontal bar chart
-                scales: {
-                    x: { 
-                        grid: { 
-                            color: 'rgba(55, 65, 81, 0.5)'
-                        },
-                        ticks: { 
-                            font: { 
-                                family: "'Space Grotesk', sans-serif",
-                                size: 12
-                            } 
-                        } 
-                    },
-                    y: { 
-                        grid: { 
-                            display: false 
-                        }, 
-                        ticks: { 
-                            font: { 
-                                family: "'Space Grotesk', sans-serif", 
-                                size: 14 
-                            } 
-                        } 
-                    }
-                },
-                plugins: {
-                    legend: { 
-                        display: false 
-                    },
-                    tooltip: {
-                        backgroundColor: '#111827',
-                        titleFont: { 
-                            size: 16, 
-                            family: "'IBM Plex Mono', monospace" 
-                        },
-                        bodyFont: { 
-                            size: 14, 
-                            family: "'Space Grotesk', sans-serif" 
-                        },
-                        padding: 12,
-                        callbacks: {
-                            label: function(context) {
-                                return `$${context.parsed.x}B market`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-    
-    // Create particle effect for hero section
-    const particlesContainer = document.getElementById('particles');
-    if (particlesContainer) {
-        for (let i = 0; i < 100; i++) {
-            const particle = document.createElement('div');
-            particle.style.position = 'absolute';
-            particle.style.width = Math.random() * 3 + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.background = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 50)}, ${Math.floor(Math.random() * 200 + 55)}, ${Math.random() * 0.5 + 0.3})`;
-            particle.style.borderRadius = '50%';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.boxShadow = '0 0 10px rgba(192, 38, 211, 0.7)';
-            particle.style.zIndex = '-1';
-            particlesContainer.appendChild(particle);
-            
-            // Animate particles
-            animateParticle(particle);
-        }
-    }
-    
-    function animateParticle(particle) {
-        const duration = Math.random() * 10 + 10;
-        const xMovement = (Math.random() - 0.5) * 100;
-        const yMovement = (Math.random() - 0.5) * 100;
-        
-        particle.animate([
-            { transform: 'translate(0, 0)' },
-            { transform: `translate(${xMovement}px, ${yMovement}px)` }
-        ], {
-            duration: duration * 1000,
-            iterations: Infinity,
-            direction: 'alternate'
-        });
-    }
-});
-</script>
+    </script>
 </body>
 </html>
