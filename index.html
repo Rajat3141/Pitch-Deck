@@ -6,32 +6,38 @@
     <title>Laxvion Solutions | Genesis Workflow</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        glass: 'rgba(26, 26, 26, 0.5)',
+                        accent: '#c026d3',
+                        primary: '#e5e7eb',
+                        secondary: '#9ca3af'
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['IBM Plex Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
         
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-glass: rgba(26, 26, 26, 0.5);
-            --border-color: rgba(192, 38, 211, 0.2);
-            --accent-violet: #c026d3;
-            --text-primary: #e5e7eb;
-            --text-secondary: #9ca3af;
-        }
-        
         body {
             background: radial-gradient(ellipse at center, #1a0a2a 0%, #0a0a0a 70%);
-            color: var(--text-primary);
-            font-family: 'Space Grotesk', sans-serif;
+            color: #e5e7eb;
             min-height: 100vh;
             overflow-x: hidden;
         }
         
-        h1, h2, h3 { font-family: 'IBM Plex Mono', monospace; }
-        
         .glass-card {
             background: linear-gradient(145deg, rgba(26, 26, 26, 0.6), rgba(15, 15, 15, 0.3));
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(192, 38, 211, 0.2);
             border-radius: 1rem;
             padding: 2rem;
@@ -43,8 +49,6 @@
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(192, 38, 211, 0.2);
         }
-        
-        .text-accent { color: var(--accent-violet); }
         
         .workflow-step {
             position: relative;
@@ -84,7 +88,7 @@
             background: rgba(192, 38, 211, 0.1);
             margin-bottom: 1rem;
             font-size: 1.5rem;
-            color: var(--accent-violet);
+            color: #c026d3;
         }
         
         .team-card {
@@ -96,42 +100,51 @@
             box-shadow: 0 15px 40px rgba(192, 38, 211, 0.3);
         }
         
+        .highlight-box {
+            border-left: 4px solid #c026d3;
+            padding-left: 1.5rem;
+        }
+        
+        .animate-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.2s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
         }
-        
-        .workflow-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        @media (min-width: 1024px) {
-            .workflow-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .highlight-box {
-            border-left: 4px solid var(--accent-violet);
-            padding-left: 1.5rem;
-        }
     </style>
 </head>
-<body class="text-gray-100">
-    <header class="py-6 px-4 lg:px-8">
+<body class="font-sans">
+    <!-- Header -->
+    <header class="py-6 px-4 lg:px-8 sticky top-0 z-50 bg-dark/80 backdrop-blur-md">
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold">
                 <span class="text-accent">Laxvion</span> Solutions
             </div>
             <nav class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#" class="hover:text-accent transition-colors">Home</a>
-                <a href="#" class="hover:text-accent transition-colors">Technology</a>
-                <a href="#" class="text-accent font-bold">Workflow</a>
-                <a href="#" class="hover:text-accent transition-colors">Team</a>
-                <a href="#" class="hover:text-accent transition-colors">Contact</a>
+                <a href="#story" class="hover:text-accent transition-colors">Our Story</a>
+                <a href="#problem" class="hover:text-accent transition-colors">The Problem</a>
+                <a href="#solution" class="hover:text-accent transition-colors">Our Solution</a>
+                <a href="#workflow" class="text-accent font-bold">Genesis Workflow</a>
+                <a href="#team" class="hover:text-accent transition-colors">Our Team</a>
             </nav>
             <button class="md:hidden text-xl">
                 <i class="fas fa-bars"></i>
@@ -139,145 +152,356 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-12 max-w-6xl">
-        <section class="mb-16 text-center">
+    <!-- Hero Section -->
+    <section class="py-20 px-4 text-center">
+        <div class="max-w-4xl mx-auto animate-in">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                The <span class="text-accent">Genesis</span> Workflow
+                <span class="text-accent">Engineering Digital Souls</span> for the Next Generation of Influence
             </h1>
-            <p class="text-lg text-text-secondary max-w-3xl mx-auto">
-                Our proprietary workflow extends beyond ComfyUI with 18 custom nodes and pipelines that enable deterministic output control at scale.
+            <p class="text-lg text-secondary max-w-2xl mx-auto mb-8">
+                Laxvion Solutions has pioneered the Genesis Workflow - the world's most advanced system for creating hyper-realistic, persistent AI personalities.
             </p>
-        </section>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#workflow" class="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity">
+                    Discover Genesis Workflow
+                </a>
+                <a href="#story" class="bg-transparent border-2 border-accent text-accent font-bold py-3 px-8 rounded-lg hover:bg-accent hover:text-white transition-colors">
+                    Our Story
+                </a>
+            </div>
+        </div>
+    </section>
 
-        <div class="workflow-container">
-            <div class="space-y-8">
-                <!-- Workflow Steps -->
-                <div class="glass-card workflow-step active">
-                    <div class="flex items-start gap-6">
-                        <div class="text-3xl font-bold text-accent">1</div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">Blueprint</h3>
-                            <p class="text-text-secondary">ControlNet (Pose, Depth) + Core Prompting</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card workflow-step">
-                    <div class="flex items-start gap-6">
-                        <div class="text-3xl font-bold text-accent">2</div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">Identity</h3>
-                            <p class="text-text-secondary">IP-Adapter + Custom Identity LoRA</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card workflow-step">
-                    <div class="flex items-start gap-6">
-                        <div class="text-3xl font-bold text-accent">3</div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">Generation</h3>
-                            <p class="text-text-secondary">Custom Checkpoint Mix + Latent Refinement</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card workflow-step">
-                    <div class="flex items-start gap-6">
-                        <div class="text-3xl font-bold text-accent">4</div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">Detailing</h3>
-                            <p class="text-text-secondary">Multi-Pass Detailer Nodes (Face, Hands, Fabric)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card workflow-step">
-                    <div class="flex items-start gap-6">
-                        <div class="text-3xl font-bold text-accent">5</div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">Soul</h3>
-                            <p class="text-text-secondary">Personality Matrix (LLM-driven Content)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Highlight Box -->
-                <div class="glass-card mt-8">
-                    <div class="highlight-box">
-                        <p class="text-lg text-purple-300">
-                            <i class="fas fa-quote-left text-accent mr-2"></i>
-                            Breathe life into pixels. A proprietary mix of fine-tuned checkpoints and a multi-stage denoising process generates the core image with a focus on photorealistic lighting and anatomy.
-                        </p>
-                    </div>
-                </div>
+    <!-- Our Story -->
+    <section id="story" class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Our <span class="text-accent">Origin Story</span>
+                </h2>
+                <p class="text-lg text-secondary max-w-3xl mx-auto">
+                    From concept to breakthrough - how we redefined what's possible with AI-generated personalities.
+                </p>
             </div>
             
-            <div>
-                <!-- Workflow Diagram -->
-                <div class="glass-card h-full">
-                    <div class="flex justify-center mb-6">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-gradient-to-r from-purple-900 to-fuchsia-900 rounded-xl blur-xl opacity-50"></div>
-                            <div class="relative bg-gradient-to-br from-purple-900 to-fuchsia-900 rounded-xl p-1">
-                                <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <div class="inline-block bg-gray-800 rounded-full p-6 mb-6">
-                                            <i class="fas fa-project-diagram text-5xl text-accent"></i>
-                                        </div>
-                                        <h3 class="text-xl font-bold mb-2">Genesis Workflow Diagram</h3>
-                                        <p class="text-text-secondary">Visual representation of our proprietary pipeline</p>
-                                    </div>
-                                </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="glass-card animate-in">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">The Genesis of an Idea</h3>
+                    </div>
+                    <p class="mb-4">
+                        In 2022, our founders Rajat and Lokendra were working on generative AI projects when they noticed a critical gap - AI could create stunning images, but couldn't maintain consistent identities across generations.
+                    </p>
+                    <p class="mb-4">
+                        They realized that for AI influencers to be viable, they needed to be more than just images - they needed persistent digital identities that could evolve over time while maintaining core characteristics.
+                    </p>
+                    <p>
+                        This insight led to the birth of Laxvion Solutions and our core mission: to engineer digital souls, not just digital images.
+                    </p>
+                </div>
+                
+                <div class="glass-card animate-in">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">The Breakthrough</h3>
+                    </div>
+                    <p class="mb-4">
+                        After 18 months of research and development, our team achieved a breakthrough - the Identity Lock technology that forms the core of our Genesis Workflow.
+                    </p>
+                    <p class="mb-4">
+                        By combining custom-trained LoRA models, IP-Adapters, and a proprietary multi-stage refinement process, we solved the identity consistency problem that had plagued AI-generated characters.
+                    </p>
+                    <p>
+                        In early 2024, we introduced Lyra - the world's first truly persistent AI personality with a consistent identity across thousands of generations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Problem -->
+    <section id="problem" class="py-16 px-4 bg-gradient-to-b from-dark to-purple-900/10">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    The <span class="text-accent">Digital Influence Crisis</span>
+                </h2>
+                <p class="text-lg text-secondary max-w-3xl mx-auto">
+                    Today's $200B influencer market faces unprecedented challenges that limit brand potential and ROI.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card animate-in">
+                    <div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 mb-4">
+                        <i class="fas fa-user-slash text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Human Limitations</h3>
+                    <p class="text-secondary">
+                        Scandals, creative burnout, and off-brand messaging create constant risk. 74% of brands report influencer-related PR crises annually. Human influencers are expensive and unpredictable.
+                    </p>
+                </div>
+                
+                <div class="glass-card animate-in" style="transition-delay: 0.2s">
+                    <div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 mb-4">
+                        <i class="fas fa-robot text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">AI Inconsistency</h3>
+                    <p class="text-secondary">
+                        Standard tools produce chaotic results. Different faces, broken hands, and the "dead eye" effect shatter the illusion of reality. 92% of users can detect AI-generated content.
+                    </p>
+                </div>
+                
+                <div class="glass-card animate-in" style="transition-delay: 0.4s">
+                    <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
+                        <i class="fas fa-lock text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Creative Constraints</h3>
+                    <p class="text-secondary">
+                        True creative freedom is impossible. You're limited by logistics, locations, and the static nature of existing talent. Campaigns take 3-4 weeks on average to launch.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Solution -->
+    <section id="solution" class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Our <span class="text-accent">Revolutionary Solution</span>
+                </h2>
+                <p class="text-lg text-secondary max-w-3xl mx-auto">
+                    Meet Lyra - the world's first persistent digital being with a consistent identity across all media.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="glass-card animate-in">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                                <i class="fas fa-fingerprint"></i>
                             </div>
+                            <h3 class="text-xl font-bold">Persistent Identity Technology</h3>
+                        </div>
+                        <p class="mb-4">
+                            Lyra isn't just an image - she's a persistent digital entity. Our Identity Lock technology ensures she maintains the same facial structure, physique, and core features across thousands of generations.
+                        </p>
+                        <p class="mb-4">
+                            Through our proprietary combination of custom-trained LoRA models and IP-Adapters, we've solved the identity consistency problem that has limited AI-generated characters.
+                        </p>
+                        <div class="bg-dark p-4 rounded-lg mt-6">
+                            <p class="font-mono text-accent">Technical Specs:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-xs mr-2 text-accent"></i>
+                                    <span>12M parameter Identity Model</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-xs mr-2 text-accent"></i>
+                                    <span>7B parameter Personality Matrix</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-circle text-xs mr-2 text-accent"></i>
+                                    <span>Multi-modal Content Engine</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 mt-8">
-                        <div class="glass-card p-4 text-center">
-                            <div class="text-accent text-xl mb-2">
-                                <i class="fas fa-code-branch"></i>
+                </div>
+                
+                <div class="animate-in" style="transition-delay: 0.3s">
+                    <div class="glass-card p-2 rounded-xl overflow-hidden">
+                        <div class="bg-gradient-to-br from-purple-900 to-fuchsia-900 p-1 rounded-lg">
+                            <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="inline-block bg-gray-800 rounded-full p-6 mb-6">
+                                        <i class="fas fa-user-astronaut text-5xl text-accent"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-2">Lyra AI</h3>
+                                    <p class="text-secondary">The World's First Persistent Digital Being</p>
+                                </div>
                             </div>
-                            <h4 class="font-bold">18 Custom Nodes</h4>
-                            <p class="text-sm text-text-secondary">Proprietary workflow components</p>
-                        </div>
-                        
-                        <div class="glass-card p-4 text-center">
-                            <div class="text-accent text-xl mb-2">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <h4 class="font-bold">Temporal Consistency</h4>
-                            <p class="text-sm text-text-secondary">Frame-to-frame stability for video</p>
-                        </div>
-                        
-                        <div class="glass-card p-4 text-center">
-                            <div class="text-accent text-xl mb-2">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <h4 class="font-bold">Parallel Processing</h4>
-                            <p class="text-sm text-text-secondary">10x faster than standard pipelines</p>
-                        </div>
-                        
-                        <div class="glass-card p-4 text-center">
-                            <div class="text-accent text-xl mb-2">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <h4 class="font-bold">Multi-Modal Output</h4>
-                            <p class="text-sm text-text-secondary">Images, video, text, and audio</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Team Section -->
-        <section class="mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
-                The <span class="text-accent">Genesis</span> Team
-            </h2>
+    </section>
+
+    <!-- Genesis Workflow -->
+    <section id="workflow" class="py-16 px-4 bg-gradient-to-b from-dark to-purple-900/10">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    The <span class="text-accent">Genesis Workflow</span>
+                </h2>
+                <p class="text-lg text-secondary max-w-3xl mx-auto">
+                    Our proprietary workflow extends beyond ComfyUI with 18 custom nodes and pipelines that enable deterministic output control at scale.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div class="glass-card workflow-step active animate-in">
+                        <div class="flex items-start gap-6">
+                            <div class="text-3xl font-bold text-accent">1</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Blueprint</h3>
+                                <p class="text-secondary">ControlNet (Pose, Depth) + Core Prompting</p>
+                                <p class="mt-4">
+                                    We start by defining the foundational structure using ControlNet to lock in the exact pose, composition, and depth of the scene. This gives us unparalleled directorial control over the final output.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card workflow-step animate-in" style="transition-delay: 0.2s">
+                        <div class="flex items-start gap-6">
+                            <div class="text-3xl font-bold text-accent">2</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Identity</h3>
+                                <p class="text-secondary">IP-Adapter + Custom Identity LoRA</p>
+                                <p class="mt-4">
+                                    Here we inject the unique soul. Our custom-trained LoRA models and IP-Adapters ensure the digital human's facial identity remains perfectly consistent across every single generation.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card workflow-step animate-in" style="transition-delay: 0.4s">
+                        <div class="flex items-start gap-6">
+                            <div class="text-3xl font-bold text-accent">3</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Generation</h3>
+                                <p class="text-secondary">Custom Checkpoint Mix + Latent Refinement</p>
+                                <p class="mt-4">
+                                    We breathe life into pixels using a proprietary mix of fine-tuned checkpoints and a multi-stage denoising process. This generates the core image with photorealistic lighting and anatomy.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card workflow-step animate-in" style="transition-delay: 0.6s">
+                        <div class="flex items-start gap-6">
+                            <div class="text-3xl font-bold text-accent">4</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Detailing</h3>
+                                <p class="text-secondary">Multi-Pass Detailer Nodes (Face, Hands, Fabric)</p>
+                                <p class="mt-4">
+                                    This is where we achieve hyperrealism. Automated, multi-pass detailer nodes target and enhance specific features—skin texture, eye reflections, fabric weaves—eliminating any trace of the uncanny valley.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card workflow-step animate-in" style="transition-delay: 0.8s">
+                        <div class="flex items-start gap-6">
+                            <div class="text-3xl font-bold text-accent">5</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Soul</h3>
+                                <p class="text-secondary">Personality Matrix (LLM-driven Content)</p>
+                                <p class="mt-4">
+                                    Finally, we grant a voice. Our federated LLM framework, the Personality Matrix, analyzes the image and generates context-aware, on-brand captions and social media narratives autonomously.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card mt-8 animate-in" style="transition-delay: 1s">
+                        <div class="highlight-box">
+                            <p class="text-lg text-purple-300">
+                                <i class="fas fa-quote-left text-accent mr-2"></i>
+                                Breathe life into pixels. A proprietary mix of fine-tuned checkpoints and a multi-stage denoising process generates the core image with a focus on photorealistic lighting and anatomy.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="animate-in" style="transition-delay: 0.5s">
+                    <div class="glass-card h-full">
+                        <div class="flex justify-center mb-6">
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-gradient-to-r from-purple-900 to-fuchsia-900 rounded-xl blur-xl opacity-50"></div>
+                                <div class="relative bg-gradient-to-br from-purple-900 to-fuchsia-900 rounded-xl p-1">
+                                    <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center">
+                                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+                                             alt="Genesis Workflow Diagram" 
+                                             class="rounded-lg w-full h-auto object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold mb-6">Technical Advantages</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-accent text-xl mb-2">
+                                    <i class="fas fa-code-branch"></i>
+                                </div>
+                                <h4 class="font-bold">18 Custom Nodes</h4>
+                                <p class="text-sm text-secondary">Proprietary workflow components</p>
+                            </div>
+                            
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-accent text-xl mb-2">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <h4 class="font-bold">Temporal Consistency</h4>
+                                <p class="text-sm text-secondary">Frame-to-frame stability for video</p>
+                            </div>
+                            
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-accent text-xl mb-2">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h4 class="font-bold">Parallel Processing</h4>
+                                <p class="text-sm text-secondary">10x faster than standard pipelines</p>
+                            </div>
+                            
+                            <div class="glass-card p-4 text-center">
+                                <div class="text-accent text-xl mb-2">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <h4 class="font-bold">Multi-Modal Output</h4>
+                                <p class="text-sm text-secondary">Images, video, text, and audio</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 glass-card">
+                            <h4 class="font-bold mb-3 text-accent">Why It Matters</h4>
+                            <p class="text-sm">
+                                Traditional AI workflows produce inconsistent results. Genesis delivers deterministic outputs with perfect identity consistency - making AI influencers viable for brands at scale.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    The <span class="text-accent">Architects</span> of Genesis
+                </h2>
+                <p class="text-lg text-secondary max-w-3xl mx-auto">
+                    Our team combines world-class expertise in generative AI, computational mathematics, and digital artistry.
+                </p>
+            </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card team-card">
+                <div class="glass-card team-card animate-in">
                     <div class="flex flex-col items-center text-center">
                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
                             <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
@@ -286,11 +510,13 @@
                         </div>
                         <h3 class="text-xl font-bold">Rajat Khandelwal</h3>
                         <p class="text-accent font-medium mt-1 font-mono">CEO & Visionary Architect</p>
-                        <p class="text-text-secondary mt-4">An IIT Guwahati (CS) alumnus with 8 years in generative AI. Formerly led AI initiatives at Google Research.</p>
+                        <p class="text-secondary mt-4">
+                            An IIT Guwahati (CS) alumnus with 8 years in generative AI. Formerly led AI initiatives at Google Research. Focuses on translating raw AI power into market-disrupting products.
+                        </p>
                     </div>
                 </div>
                 
-                <div class="glass-card team-card">
+                <div class="glass-card team-card animate-in" style="transition-delay: 0.2s">
                     <div class="flex flex-col items-center text-center">
                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
                             <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
@@ -299,11 +525,13 @@
                         </div>
                         <h3 class="text-xl font-bold">Lokendra Singh</h3>
                         <p class="text-accent font-medium mt-1 font-mono">Research Lead</p>
-                        <p class="text-text-secondary mt-4">A graduate of IIT Kanpur (Math & Computing) with a PhD in Computational Mathematics.</p>
+                        <p class="text-secondary mt-4">
+                            A graduate of IIT Kanpur (Math & Computing) with a PhD in Computational Mathematics. Author of 12 papers on neural rendering and GAN architectures.
+                        </p>
                     </div>
                 </div>
                 
-                <div class="glass-card team-card">
+                <div class="glass-card team-card animate-in" style="transition-delay: 0.4s">
                     <div class="flex flex-col items-center text-center">
                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-accent mb-4">
                             <div class="w-full h-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center">
@@ -312,19 +540,41 @@
                         </div>
                         <h3 class="text-xl font-bold">Dinesh Jakhar</h3>
                         <p class="text-accent font-medium mt-1 font-mono">CTO & Workflow Engineer</p>
-                        <p class="text-text-secondary mt-4">Full stack developer and workflow engineer. Architect of the Genesis pipeline and integration systems.</p>
+                        <p class="text-secondary mt-4">
+                            Full stack developer and workflow engineer. Architect of the Genesis pipeline and integration systems. Specializes in creating deterministic outputs at scale.
+                        </p>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- Call to Action -->
-        <section class="mt-20 text-center">
-            <div class="glass-card py-12 px-6 max-w-3xl mx-auto">
+            
+            <div class="mt-12 glass-card text-center max-w-3xl mx-auto animate-in" style="transition-delay: 0.6s">
+                <h3 class="text-xl font-bold mb-4 text-accent">Research & Development</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="text-3xl text-accent font-bold">18</div>
+                        <div class="text-sm text-secondary">Patents Filed</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl text-accent font-bold">42</div>
+                        <div class="text-sm text-secondary">Research Papers</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl text-accent font-bold">7</div>
+                        <div class="text-sm text-secondary">Open Source Projects</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 px-4 bg-gradient-to-b from-dark to-purple-900/10">
+        <div class="container mx-auto max-w-4xl">
+            <div class="glass-card py-12 px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6">
                     Ready to Harness the Power of <span class="text-accent">Genesis</span>?
                 </h2>
-                <p class="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+                <p class="text-lg text-secondary mb-8">
                     Our workflow delivers unprecedented consistency and creativity for AI-generated content. See it in action.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -336,37 +586,51 @@
                     </button>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <footer class="mt-20 py-10 border-t border-gray-800">
-        <div class="container mx-auto px-4 text-center">
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-gray-800">
+        <div class="container mx-auto text-center">
             <div class="text-2xl font-bold mb-4">
                 <span class="text-accent">Laxvion</span> Solutions
             </div>
-            <p class="text-text-secondary max-w-2xl mx-auto">
+            <p class="text-secondary max-w-2xl mx-auto">
                 Engineering the future of digital influence with proprietary AI workflows and persistent digital identities.
             </p>
             <div class="mt-6 flex justify-center space-x-6">
-                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                <a href="#" class="text-secondary hover:text-accent transition-colors">
                     <i class="fab fa-linkedin text-xl"></i>
                 </a>
-                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                <a href="#" class="text-secondary hover:text-accent transition-colors">
                     <i class="fab fa-twitter text-xl"></i>
                 </a>
-                <a href="#" class="text-text-secondary hover:text-accent transition-colors">
+                <a href="#" class="text-secondary hover:text-accent transition-colors">
                     <i class="fab fa-github text-xl"></i>
                 </a>
             </div>
-            <div class="mt-8 text-sm text-text-secondary">
+            <div class="mt-8 text-sm text-secondary">
                 © 2023 Laxvion Solutions. All rights reserved.
             </div>
         </div>
     </footer>
 
     <script>
-        // Workflow step interactivity
+        // Animation on scroll
         document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('appear');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.animate-in').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Workflow step interactivity
             const steps = document.querySelectorAll('.workflow-step');
             
             steps.forEach(step => {
